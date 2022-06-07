@@ -1,0 +1,1 @@
+foglight experience monitor monitors application response time for web transactions (end-user or web services)

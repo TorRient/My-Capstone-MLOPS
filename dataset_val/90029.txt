@@ -1,0 +1,1 @@
+glibc implements functions such as fork within libc

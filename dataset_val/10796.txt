@@ -1,0 +1,1 @@
+Boost is given in terms of pressure ratio which is the ratio of absolute air pressure before the blower to the absolute air pressure after compression by the blower

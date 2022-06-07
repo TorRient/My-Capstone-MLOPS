@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scan-document
+  labels:
+    app: scan-document
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scan-document
+  template:
+    metadata:
+      labels:
+        app: scan-document
+    spec:
+      containers:
+      - image: gcr.io/torrient/scanocr
+        name: scan-document
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080

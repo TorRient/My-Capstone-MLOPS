@@ -1,0 +1,1 @@
+for comparison: in classical mechanics events are described by its (three-dimensional) position at each moment in time

@@ -1,0 +1,1 @@
+For named entity all phrases in the text were supposed to be marked as person

@@ -1,0 +1,27 @@
+stages:
+  create_dataset:
+    cmd: python create_dataset.py --config=params.yaml
+    deps:
+    - create_dataset.py
+
+  # training:
+  #   cmd: python src/tool/training.py --config=params.yaml
+  #   deps:
+  #   - src/tool/training.py
+  #   outs:
+  #     - ./weights/ocr_model.pth:
+  #         checkpoint: true
+  #         cache: false
+
+  val:
+    cmd:
+    - python src/tool/evaluate.py --config=params.yaml
+    deps:
+    - src/tool/evaluate.py
+    params:
+    - model_name
+    live:
+      reports:
+        summary: true
+        html: true
+        cache: false

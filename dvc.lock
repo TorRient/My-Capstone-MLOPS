@@ -1,0 +1,23 @@
+schema: '2.0'
+stages:
+  val:
+    cmd:
+    - python src/tool/evaluate.py --config=params.yaml
+    deps:
+    - path: src/tool/evaluate.py
+      md5: 93e6376a84afb3922c114a0130676995
+      size: 2307
+    params:
+      params.yaml:
+        model_name: src/config/vgg-seq2seq.yml
+    outs:
+    - path: reports
+      md5: 406ce63d8f7db4ee78058d1b102cca6b.dir
+      size: 0
+      nfiles: 2
+  create_dataset:
+    cmd: python create_dataset.py --config=params.yaml
+    deps:
+    - path: create_dataset.py
+      md5: 450969309d5e0c842aa0af6b1d4821c5
+      size: 939

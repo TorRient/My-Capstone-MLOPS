@@ -1,0 +1,1 @@
+Each CPU supports 2 threads

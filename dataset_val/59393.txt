@@ -1,0 +1,1 @@
+each center is responsible for many thousands of square miles of airspace (known as a flight information region) and for the airports within that airspace

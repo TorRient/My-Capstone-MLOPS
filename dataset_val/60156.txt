@@ -1,0 +1,1 @@
+each segment is replaced by a cross formed by 6 segments

@@ -1,0 +1,1 @@
+depending on the complexity of the product a number of levels of this assembly are created until the basic definition of components can be identified

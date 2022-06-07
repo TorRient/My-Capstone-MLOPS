@@ -1,0 +1,1 @@
+but can solve some problems more efficiently because fewer training data are needed

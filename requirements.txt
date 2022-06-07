@@ -1,0 +1,9 @@
+dvc==2.10.2
+dvclive==0.8.2
+torch
+torchvision>=0.9.1
+matplotlib
+numpy
+pyyaml
+gdown
+Pillow==8.0.1

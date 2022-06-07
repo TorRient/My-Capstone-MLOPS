@@ -1,0 +1,1 @@
+Because of a relationship between the cumulative binomial distribution and the beta distribution

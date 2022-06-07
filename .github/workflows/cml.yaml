@@ -1,0 +1,87 @@
+name: CML Report
+on:
+  push:
+    branches:
+    - master
+jobs:
+  deploy-runner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iterative/setup-cml@v1
+      - uses: actions/checkout@v2
+      - name: Deploy runner on EC2
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DATA }}
+        run: |
+          cml runner \
+              --single \
+              --cloud=gcp \
+              --cloud-region=us-west \
+              --cloud-type=e2-highmem-8 \
+              --labels=cml-cpu
+
+  evaluate:
+    needs: deploy-runner
+    runs-on: [self-hosted, cml-cpu]
+    timeout-minutes: 4320 # 72h
+    container:
+      image: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate metrics report
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DATA }}
+        run: |
+          dvc remote add -d -f remote_storage gs://ocr_dataset_val/dataset_val
+          pip install -r requirements.txt
+          dvc repro
+          echo "## Metrics" >> report.md
+          dvc metrics show --show-md >> report.md
+          cml send-comment report.md
+      
+  # deploy:
+  #   name: Setup Gcloud Account
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/scanocr
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+    
+  #   - id: 'auth'
+  #     uses: 'google-github-actions/auth@v0'
+  #     with:
+  #       credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DATA }}'
+        
+  #   - name: Configure Docker
+  #     run: gcloud auth configure-docker --quiet
+
+  #   - name: Check if the requested directories have any changes
+  #     uses: dorny/paths-filter@v2
+  #     id: changes
+  #     with:
+  #         filters: |
+  #             src:
+  #               - 'src/**'
+  #               - '.github/**'
+  #               - 'k8s/**'  
+
+  #   - name: Build Docker image
+  #     if: steps.changes.outputs.src == 'true'
+  #     run: docker build src -t $IMAGE_NAME
+
+  #   - name: Push Docker image
+  #     if: steps.changes.outputs.src == 'true'
+  #     run: docker push $IMAGE_NAME
+  
+  #   - name: Deploy
+  #     if: steps.changes.outputs.src == 'true'
+  #     run: |
+  #       gcloud config set compute/region us-central1
+  #       gcloud config set compute/zone us-central1-c
+  #       gcloud container clusters create thuyen-test-k8s
+  #       gcloud container clusters get-credentials thuyen-test-k8s
+  #       kubectl apply -f k8s/deployment.yaml
+  #       kubectl apply -f k8s/service.yaml

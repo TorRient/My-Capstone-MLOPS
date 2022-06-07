@@ -1,0 +1,1 @@
+directly generating the merged output bypasses some problems with ed

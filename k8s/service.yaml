@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scan-document
+  labels:
+    app: scan-document
+spec:
+  selector:
+    app: scan-document
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  type: LoadBalancer

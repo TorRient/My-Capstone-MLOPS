@@ -1,0 +1,1 @@
+DHCP is a protocol used by networked computers (clients) to obtain IP addresses and other parameters such as the default gateway

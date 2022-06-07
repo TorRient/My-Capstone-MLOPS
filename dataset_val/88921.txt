@@ -1,0 +1,1 @@
+GETS is necessary because reliance on telecommunications has been accompanied by an increased vulnerability to network congestion and system failures

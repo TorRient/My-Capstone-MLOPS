@@ -1,0 +1,11 @@
+torch==1.7.1
+torchvision==0.8.2
+Pillow==8.0.1
+uvicorn
+fastapi
+python-multipart
+gdown
+prefetch_generator
+pyyaml
+paddlepaddle==2.3.0
+paddleocr==2.5.0.3

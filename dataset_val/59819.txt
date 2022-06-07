@@ -1,0 +1,1 @@
+Each node or system in the network is installed with a monitoring program that will consistently check for the erratic behaviour of the system which will suspect the indication of virus's presence
