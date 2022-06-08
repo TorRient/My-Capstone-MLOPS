@@ -31,7 +31,7 @@ def loader(path_nano):
         path_img, text = line.replace("\n", "").split("\t")
         l_img.append(path_img)
         l_text.append(text)
-        if i == 1000:
+        if i == 500:
             break
     return l_img, l_text
 
