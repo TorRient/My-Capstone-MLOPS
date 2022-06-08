@@ -5,12 +5,12 @@
 - [X] Data Versioning: DVC
 - [X] Machine Learning Pipeline: DVC Pipeline (preprocess, train, evaluate)
 - [X] Model Registry: DVC
-- [O] Monitor model: Weights & Biases and MLflow
+- [X] Monitor model: Weights & Biases and DVC Studio
 - [X] CI/CD: Github Actions
 - [X] CML: Continuous Machine Learning and Github Actions
 - [X] Deploy on release: Github Actions and Kubernetes on GCP
 - [X] Rolling update: Kustomize - autoscale - auto progresive delivery - Kubernetes
-- [O] Monitor: Grafana
+- [X] Monitor: Grafana
 
 ## 📋 Requirements
 

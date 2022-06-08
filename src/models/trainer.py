@@ -24,9 +24,25 @@ import os
 import matplotlib.pyplot as plt
 import time
 
+from dvclive import Live
+
+dvclive = Live()
+
+import wandb
+wandb.login()
+wandb.init(project="My-capstone-MLOps")
+
 class Trainer():
     def __init__(self, config, pretrained=True, augmentor=ImgAugTransform()):
 
+        wandb.init(project="My-capstone-MLOps", config={
+            'epoch': config['trainer']['iters'],
+            'batch_size': config['trainer']['batch_size'],
+            'data_root': config['dataset']['data_root'],
+            'dataset_train_anno': config['dataset']['train_annotation'],
+            'dataset_val_anno': config['dataset']['valid_annotation'],
+            'model': config['seq_modeling']
+        })
         self.config = config
         self.model, self.vocab = build_model(config)
         
@@ -125,6 +141,13 @@ class Trainer():
                 val_loss = self.validate()
                 acc_full_seq, acc_per_char = self.precision(self.metrics)
 
+                wandb.log({'lr': self.optimizer.param_groups[0]['lr'],'train_loss': loss, "val_loss": val_loss, "Acc full sequence": acc_full_seq, "Acc per character": acc_per_char})
+                dvclive.log("iter", self.iter)
+                dvclive.log("Train loss", val_loss)
+                dvclive.log("Val loss", val_loss)
+                dvclive.log("Acc full sequence", acc_full_seq)
+                dvclive.log("Acc per character", acc_per_char)
+                dvclive.next_step()
                 info = 'iter: {:06d} - valid loss: {:.3f} - acc full seq: {:.4f} - acc per char: {:.4f}'.format(self.iter, val_loss, acc_full_seq, acc_per_char)
                 print(info)
                 self.logger.log(info)
