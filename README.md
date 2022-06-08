@@ -4,7 +4,7 @@
 ## 🔰 Milestones
 - [X] Data Versioning: DVC
 - [X] Machine Learning Pipeline: DVC Pipeline (preprocess, train, evaluate)
-- [X] Model Registry: DVC
+- [X] Model Registry: DVC live
 - [X] Monitor model: Weights & Biases and DVC Studio
 - [X] CI/CD: Github Actions
 - [X] CML: Continuous Machine Learning and Github Actions
