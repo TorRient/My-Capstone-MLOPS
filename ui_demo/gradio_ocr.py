@@ -36,8 +36,8 @@ def inference(img):
         all_line += str(i+1) + ": " + txt + "\n"
     return f'{id}_result.jpg', all_line
 
-title = 'OCR document for Vietnamese'
-description = 'Gradio demo for OCR document'
+title = 'UI - Detect line and OCR for Vietnamese document'
+description = 'Gradio Detect line and OCR demo for Vietnamese document'
 examples = ['vb.png', 'vb2.png', 'bk.JPG']
 css = ".output_image, .input_image {height: 40rem !important; width: 100% !important;}"
 
