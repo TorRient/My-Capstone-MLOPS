@@ -28,6 +28,8 @@ jobs:
       image: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: test
       - name: Generate metrics report
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
