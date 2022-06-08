@@ -11,6 +11,7 @@
 - [X] Deploy on release: Github Actions and Kubernetes on GCP
 - [X] Rolling update: Kustomize - autoscale - auto progresive delivery - Kubernetes
 - [X] Monitor: Grafana
+- [X] UI Demo: Gradio
 
 ## 📋 Requirements
 
@@ -67,4 +68,18 @@ Now in the GitHub page for the repository, go to ```Settings->Secrets``` and add
 - GCP_PROJECT_ID: id project in your GCP
 - GOOGLE_APPLICATION_CREDENTIALS_DATA: CREDENTIALS in your GCP
 - PERSONAL_ACCESS_TOKEN: access token in your github
+```
+
+### ✅ UI DEMO
+
+Using Gradio Detect line and OCR demo for Vietnamese document
+
+API Service on Kubernetes: http://34.71.54.46/predict
+
+- Support: input - image
+
+```
+cd ui_demo
+pip install -r requirements.txt
+python3 gradio_ocr.py
 ```
