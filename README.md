@@ -1,57 +1,70 @@
-MLOps learn
-==============================
+# 🧬 MLOps Pipeline - Scan Document - Task: Detect + OCR
+[![model-deploy-on-release](https://github.com/MLOPsStudyGroup/dvc-gitactions/actions/workflows/deploy_on_release.yaml/badge.svg)](https://github.com/TorRient/My-Capstone-MLOPS/blob/master/.github/workflows/deploy_on_release.yaml)
 
-Scan document
+## 🔰 Milestones
+- [X] Data Versioning: DVC
+- [X] Machine Learning Pipeline: DVC Pipeline (preprocess, train, evaluate)
+- [X] Model Registry: DVC
+- [O] Monitor model: Weights & Biases and MLflow
+- [X] CI/CD: Github Actions
+- [X] CML: Continuous Machine Learning and Github Actions
+- [X] Deploy on release: Github Actions and Kubernetes on GCP
+- [X] Rolling update: Kustomize - autoscale - auto progresive delivery - Kubernetes
+- [O] Monitor: Grafana
 
-Project Organization
-------------
+## 📋 Requirements
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+* DVC
+* Python3 and pip
+* Access to Google Cloud Platform
+
+## 🏃🏻 Running Project
+### ⚗️ Using DVC
+
+Download data from the DVC repository (analog to ```git pull```)
+```
+export GOOGLE_APPLICATION_CREDENTIALS="path to CREDENTIALS json file in GCP"
+dvc pull
+```
+
+Reproduces the pipeline using DVC
+```
+dvc repro
+```
 
 
---------
+### ⚙️ DVC Pipelines
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+
+✂️ Preprocessing pipeline
+```
+dvc run -n preprocess -d dataset_val -o dataset_val.txt \
+python3 create_dataset.py
+```
+
+
+📘 Training pipeline
+```
+dvc run -n train -d ./src/tool/training.py -d ./dataset_train/ -d params.yaml -o ./weights/ocr_model.pth \
+python3 ./src/tool/training.py --config params.yaml
+```
+
+
+📊 Evaluate pipeline
+```
+dvc run -n evaluate -d ./src/tool/evaluate.py -d ./dataset_val/ -d params.yaml \
+python3 ./src/tool/evaluate.py --config params.yaml
+```
+
+### 🐙 Git Actions
+🔐 Google Cloud Platform and Github Credentials
+
+To use Git Actions to deploy your model, you'll need to encrypt it, to do that run the command bellow and choose a strong password.
+
+Now in the GitHub page for the repository, go to ```Settings->Secrets``` and add the keys to the following secrets:
+
+```
+- GCP_PROJECT_ID: id project in your GCP
+- GOOGLE_APPLICATION_CREDENTIALS_DATA: CREDENTIALS in your GCP
+- PERSONAL_ACCESS_TOKEN: access token in your github
+```
