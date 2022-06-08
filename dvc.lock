@@ -9,7 +9,7 @@ stages:
       size: 2307
     params:
       params.yaml:
-        model_name: src/config/vgg-seq2seq.yml
+        model_name: src/config/vgg-transformer.yml
     outs:
     - path: reports
       md5: 406ce63d8f7db4ee78058d1b102cca6b.dir

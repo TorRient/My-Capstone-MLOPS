@@ -1,2 +1,2 @@
 anno_dataset: "dataset_val"
-model_name: "src/config/vgg-seq2seq.yml"
+model_name: "src/config/vgg-transformer.yml"
