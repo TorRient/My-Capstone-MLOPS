@@ -28,6 +28,13 @@ def read_params(config_path):
         config = yaml.safe_load(yaml_file)
     return config
 
+if not os.path.exists("params.yaml"):
+    os.system("cp ../params.yaml ./")
+params_yaml = "params.yaml"
+config_yaml = read_params(params_yaml)
+config = Cfg.load_config_from_file(config_yaml["model_name"].replace("src/", ""))
+detector = Predictor(config)
+
 class NotANIMAGE(Exception):
     def __init__(self, message="Values entered are not Image"):
         self.message = message
@@ -71,10 +78,4 @@ async def predict(image_c: UploadFile=File(...)):
     }
 
 if __name__ == "__main__":
-    if not os.path.exists("params.yaml"):
-        os.system("cp ../params.yaml ./")
-    params_yaml = "params.yaml"
-    config_yaml = read_params(params_yaml)
-    config = Cfg.load_config_from_file(config_yaml["model_name"].replace("src/", ""))
-    detector = Predictor(config)
     uvicorn.run("deploy_api:app", host="0.0.0.0", port=8080)
