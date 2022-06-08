@@ -2,7 +2,7 @@ name: CML Report
 on:
   push:
     branches:
-    - master
+    - dev
 jobs:
   deploy-runner:
     runs-on: ubuntu-latest
