@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: iterative/setup-cml@v1
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - name: Deploy runner on EC2
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -20,7 +20,6 @@ jobs:
               --cloud-region=us-west \
               --cloud-type=e2-highmem-8 \
               --labels=cml-cpu
-
   evaluate:
     needs: deploy-runner
     runs-on: [self-hosted, cml-cpu]
@@ -28,8 +27,8 @@ jobs:
     container:
       image: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
-      - name: Generate metrics rSeport
+      - uses: actions/checkout@v2
+      - name: Generate metrics report
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DATA }}
