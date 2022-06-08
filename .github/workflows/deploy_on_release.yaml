@@ -18,17 +18,23 @@ jobs:
       with:
         credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DATA }}'
         
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+
     - name: Configure Docker
       run: gcloud auth configure-docker --quiet
 
-    - name: Build Docker image
+    - name: Add SHORT_SHA env property with commit short sha
+      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
+    - name: Build and push Docker image based on the changes
       run: |
         cp params.yaml src
-        docker build src -t $IMAGE_NAME:latest
-
-    - name: Push Docker image
-      run: docker push $IMAGE_NAME:latest
-
+        docker build src --tag "$IMAGE_NAME:$SHORT_SHA"
+        docker tag "$IMAGE_NAME:$SHORT_SHA" "$IMAGE_NAME:latest"
+        docker push "$IMAGE_NAME:$SHORT_SHA"
+        docker push "$IMAGE_NAME:latest"
+        
     - name: Set up Kustomize
       working-directory: k8s/
       run: |-
@@ -40,7 +46,7 @@ jobs:
       working-directory: k8s/
       run: |
         gcloud container clusters get-credentials thuyen-test-k8s --zone us-central1-c --project torrient
-        ./kustomize edit set image $IMAGE_NAME:latest
+        ./kustomize edit set image $IMAGE_NAME:$SHORT_SHA
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/scan-document
         kubectl get services -o wide

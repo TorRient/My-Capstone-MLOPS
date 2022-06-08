@@ -28,9 +28,18 @@ def read_params(config_path):
         config = yaml.safe_load(yaml_file)
     return config
 
+class NotANIMAGE(Exception):
+    def __init__(self, message="Values entered are not Image"):
+        self.message = message
+        super().__init__(self.message)
+
 @app.post('/predict')
 async def predict(image_c: UploadFile=File(...)):
-    img = Image.open(image_c.file).convert('RGB')
+    try:
+        img = Image.open(image_c.file).convert('RGB')
+    except NotANIMAGE as e:
+        response =  str(e)
+        return response
     img = np.asarray(img)
     results = ocr.ocr(img, rec=False, cls=False)
     boxes = np.asarray([line for line in results])
