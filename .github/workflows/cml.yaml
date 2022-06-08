@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: iterative/setup-cml@v1
       - uses: actions/checkout@v2
+        with:
+          ref: dev
       - name: Deploy runner on EC2
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -29,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: test
+          ref: dev
       - name: Generate metrics report
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
