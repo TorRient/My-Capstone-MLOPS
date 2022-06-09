@@ -56,6 +56,10 @@ async def predict(image_c: UploadFile=File(...)):
         return response
     img = np.asarray(img)
     results = ocr.ocr(img, rec=False, cls=False)
+    if len(results) == 0:
+        return {
+            "result": {'text': '', 'box': []}
+        }
     boxes = np.asarray([line for line in results])
     boxes = boxes[boxes[:, 0, 1].argsort()]
     img_list = []
