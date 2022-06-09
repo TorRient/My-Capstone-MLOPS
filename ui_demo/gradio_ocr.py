@@ -11,29 +11,30 @@ def inference(img):
     mem_file_c = BytesIO()
     img.save(mem_file_c, "PNG", quality=100)
     mem_file_c.seek(0)
+    all_line = ""
     r = requests.post(
                 f"http://34.71.54.46/predict",
                 files={
                     'image_c': ('image.PNG', mem_file_c, 'image/png'),
                 }
             )
-    txts = [line["text"] for line in r.json()["result"]]
-    boxes = np.asarray([line["box"] for line in r.json()["result"]])
-    img = np.asarray(img)
-    for i, box in enumerate(boxes):
-        x_min = box[0]
-        x_max = box[2]
-        y_min = box[1]
-        y_max = box[3]
-        frontscale = (y_max-y_min)/(60)
-        img = cv2.putText(img, str(i+1), (x_min-15, int((y_max+y_min)/2)), cv2.FONT_HERSHEY_SIMPLEX, frontscale, (0,0,255), 1, cv2.LINE_AA)
-        img = cv2.rectangle(img, (x_min, y_min), (x_max, y_max), (255, 0, 0), 1)
-    im_show = Image.fromarray(img)
+    if type(r.json()["result"]) == list:
+        txts = [line["text"] for line in r.json()["result"]]
+        boxes = np.asarray([line["box"] for line in r.json()["result"]])
+        img = np.asarray(img)
+        for i, box in enumerate(boxes):
+            x_min = box[0]
+            x_max = box[2]
+            y_min = box[1]
+            y_max = box[3]
+            frontscale = (y_max-y_min)/(60)
+            img = cv2.putText(img, str(i+1), (x_min-15, int((y_max+y_min)/2)), cv2.FONT_HERSHEY_SIMPLEX, frontscale, (0,0,255), 1, cv2.LINE_AA)
+            img = cv2.rectangle(img, (x_min, y_min), (x_max, y_max), (255, 0, 0), 1)
+        for i, txt in enumerate(txts):
+            all_line += str(i+1) + ": " + txt + "\n"
+        img = Image.fromarray(img)
     id = str(uuid.uuid4().hex)
-    im_show.save(id + '_result.jpg')
-    all_line = ""
-    for i, txt in enumerate(txts):
-        all_line += str(i+1) + ": " + txt + "\n"
+    img.save(id + '_result.jpg')
     return f'{id}_result.jpg', all_line
 
 title = 'UI - Detect line and OCR for Vietnamese document'
