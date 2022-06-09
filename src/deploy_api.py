@@ -40,10 +40,17 @@ class NotANIMAGE(Exception):
         self.message = message
         super().__init__(self.message)
 
+def read_image(img_b):
+    try:
+        img = Image.open(img_b.file).convert('RGB')
+    except Exception as e:
+        raise NotANIMAGE
+    return img
+
 @app.post('/predict')
 async def predict(image_c: UploadFile=File(...)):
     try:
-        img = Image.open(image_c.file).convert('RGB')
+        img = read_image(image_c)
     except NotANIMAGE as e:
         response =  str(e)
         return response
